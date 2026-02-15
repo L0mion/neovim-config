@@ -11,29 +11,38 @@ return {
 		end,
 	},
 	{
-		"williamboman/mason-lspconfig.nvim",
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		dependencies = { "williamboman/mason.nvim" },
 		config = function()
-			require("mason-lspconfig").setup({
+			require("mason-tool-installer").setup({
 				ensure_installed = {
-					"lua_ls",
-					"stylua",
+					"clang-format",
 					"clangd",
-					"ts_ls",
+					"codelldb",
+					"csharpier",
 					"cssls",
 					"html",
+					"lua_ls",
+					"netcoredbg",
 					"powershell_es",
+					"roslyn",
+					"stylua",
+					"ts_ls",
 				},
+				auto_update = false,
+				run_on_start = true,
 			})
+		end,
+	},
+	{
+		"williamboman/mason-lspconfig.nvim",
+		config = function()
+			require("mason-lspconfig").setup()
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			vim.lsp.enable("lua_ls")
-			vim.lsp.enable("clangd")
-			vim.lsp.enable("ts_ls")
-			vim.lsp.enable("cssls")
-			vim.lsp.enable("html")
 			vim.lsp.config("powershell_es", {
 				bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services/",
 			})
