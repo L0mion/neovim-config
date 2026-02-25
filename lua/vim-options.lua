@@ -62,3 +62,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.hl.on_yank()
 	end,
 })
+
+vim.filetype.add({
+	extension = {
+		razor = "razor",
+		cshtml = "razor",
+	},
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function()
+		pcall(vim.treesitter.start)
+	end,
+})
