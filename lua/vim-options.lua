@@ -54,8 +54,9 @@ vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 
-vim.keymap.set("n", "<leader>yy", '"+yy', { desc = "Yank line to Windows clipboard" })
-vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank selection to Windows clipboard" })
+vim.keymap.set("n", "<leader>yy", '"+yy', { desc = "Yank line to system clipboard" })
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank selection to system clipboard" })
+vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -78,3 +79,11 @@ vim.api.nvim_create_autocmd("FileType", {
 		pcall(vim.treesitter.start)
 	end,
 })
+
+vim.opt.makeprg = "powershell -File build.ps1"
+vim.keymap.set("n", "<leader>cb", "<cmd>make<CR>", { desc = "Build using :make (calls build.ps1)" })
+vim.keymap.set("n", "<leader>co", "<cmd>copen<CR>", { desc = "Open quickfix window" })
+vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "Close quickfix window" })
+vim.keymap.set("n", "<leader>cn", "<cmd>cnext<CR>", { desc = "Next compilation error" })
+vim.keymap.set("n", "<leader>cp", "<cmd>cprev<CR>", { desc = "Prev compilation error" })
+vim.keymap.set("n", "<leader>cf", "<cmd>cfirst<CR>", { desc = "First compilation error" })
