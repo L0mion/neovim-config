@@ -38,10 +38,12 @@ vim.diagnostic.config({
 	underline = { severity = vim.diagnostic.severity.ERROR },
 
 	virtual_text = true, -- Text shows up at the end of the line
-	virtual_lines = false, -- Teest shows up underneath the line, with virtual lines
+	virtual_lines = false, -- Text shows up underneath the line, with virtual lines
 
 	jump = { float = true },
 })
+vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "Next diagnostic in current buffer" })
+vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { desc = "Previous diagnostic in current buffer" })
 
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -80,10 +82,28 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-vim.opt.makeprg = "powershell -File build.ps1"
+vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
+	callback = function()
+		if vim.fn.filereadable("build.ps1") == 1 then
+			vim.opt.makeprg = "powershell -File build.ps1"
+		end
+	end,
+})
 vim.keymap.set("n", "<leader>cb", "<cmd>make<CR>", { desc = "Build using :make (calls build.ps1)" })
 vim.keymap.set("n", "<leader>co", "<cmd>copen<CR>", { desc = "Open quickfix window" })
 vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>", { desc = "Close quickfix window" })
 vim.keymap.set("n", "<leader>cn", "<cmd>cnext<CR>", { desc = "Next compilation error" })
 vim.keymap.set("n", "<leader>cp", "<cmd>cprev<CR>", { desc = "Prev compilation error" })
 vim.keymap.set("n", "<leader>cf", "<cmd>cfirst<CR>", { desc = "First compilation error" })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("user-lsp-attach", { clear = true }),
+	callback = function(event)
+		local map = function(keys, func, desc)
+			vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+		end
+		map("<leader>dd", vim.lsp.buf.hover, "Hover Documentation")
+		map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+		map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+	end,
+})

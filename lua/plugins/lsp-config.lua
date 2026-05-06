@@ -19,7 +19,6 @@ return {
 					"clang-format",
 					"clangd",
 					"codelldb",
-					"csharpier",
 					"cssls",
 					"html",
 					"lua_ls",
